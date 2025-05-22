@@ -1,0 +1,292 @@
+/* app.css */
+
+/* Global styles */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 15px;
+}
+
+/* Header */
+header {
+  background-color: #1e40af;
+  color: white;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+  font-size: 24px;
+  margin: 0;
+}
+
+header .flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Buttons */
+button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+button:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.bg-blue {
+  background-color: #1e40af;
+  color: white;
+}
+
+.bg-gray {
+  background-color: #4b5563;
+  color: white;
+}
+
+.bg-red {
+  background-color: #dc2626;
+  color: white;
+}
+
+.bg-yellow {
+  background-color: #d97706;
+  color: white;
+}
+
+/* Forms */
+form, div:not(.container, .flex, .autocomplete, .seat-map) {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+input, select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #1e40af;
+  box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.2);
+}
+
+/* Autocomplete dropdown */
+.autocomplete {
+  position: relative;
+  flex: 1;
+}
+
+.autocomplete ul {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: white;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  max-height: 150px;
+  overflow-y: auto;
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0;
+  z-index: 10;
+}
+
+.autocomplete li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.autocomplete li:hover {
+  background-color: #f3f4f6;
+}
+
+/* Seat map */
+.seat-map {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  background-color: #f9fafb;
+  padding: 15px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+}
+
+.seat-map button {
+  padding: 8px;
+  font-size: 12px;
+  border-radius: 4px;
+}
+
+.seat-map .booked {
+  background-color: #dc2626;
+  color: white;
+  cursor: not-allowed;
+}
+
+.seat-map .selected {
+  background-color: #1e40af;
+  color: white;
+}
+
+.seat-map .available {
+  background-color: #e5e7eb;
+}
+
+.seat-map .available:hover {
+  background-color: #d1d5db;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
+}
+
+thead {
+  background-color: #f3f4f6;
+}
+
+tbody tr {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Messages */
+.loading {
+  text-align: center;
+  color: #1e40af;
+  font-size: 16px;
+  margin: 15px 0;
+}
+
+.error {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+.success {
+  background-color: #d1fae5;
+  color: #047857;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+/* Flight cards */
+.flight-card {
+  border: 1px solid #e5e7eb;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  flex: 1;
+}
+
+.flight-card .flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Flex layouts */
+.flex {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+/* Headings */
+h2 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+h4 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  .seat-map {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .flex {
+    flex-direction: column;
+  }
+
+  th, td {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  button {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .flight-card {
+    flex: none;
+    width: 100%;
+  }
+}

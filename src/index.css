@@ -1,0 +1,304 @@
+/* Base styles for the app container */
+.app {
+  @apply min-h-screen bg-gray-100 font-sans;
+}
+
+/* Header styles */
+header {
+  @apply bg-blue-600 text-white p-4 shadow-md;
+}
+
+header .container {
+  @apply mx-auto flex justify-between items-center;
+}
+
+header h1 {
+  @apply text-2xl font-bold;
+}
+
+header .user-info button {
+  @apply px-4 py-2 bg-blue-800 rounded hover:bg-blue-700 transition;
+}
+
+/* Form row for consistent form layouts */
+.form-row {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4;
+}
+
+.form-row label {
+  @apply block;
+}
+
+.form-row input,
+.form-row select {
+  @apply w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+.form-row .checkbox {
+  @apply flex items-center space-x-2;
+}
+
+/* Flight search section */
+.flight-search {
+  @apply bg-white p-6 rounded-lg shadow-md;
+}
+
+.flight-search h2 {
+  @apply text-xl font-semibold mb-4;
+}
+
+.flight-search button[type="submit"] {
+  @apply w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition;
+}
+
+/* Flight list section */
+.flight-list {
+  @apply bg-white p-6 rounded-lg shadow-md;
+}
+
+.flight-list h2 {
+  @apply text-xl font-semibold mb-4;
+}
+
+.flight-list .flights-container {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+}
+
+.flight-card {
+  @apply border p-4 rounded-lg shadow-sm;
+}
+
+.flight-card .flight-header {
+  @apply flex justify-between items-center mb-2;
+}
+
+.flight-card .flight-header h3 {
+  @apply text-lg font-semibold;
+}
+
+.flight-card .flight-header span {
+  @apply text-green-600 font-bold;
+}
+
+.flight-card .flight-details {
+  @apply flex justify-between items-center;
+}
+
+.flight-card .flight-duration {
+  @apply text-center;
+}
+
+.flight-card .flight-duration .flight-line {
+  @apply h-1 bg-gray-300 w-24 mx-auto my-1;
+}
+
+.flight-card button {
+  @apply mt-2 w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition;
+}
+
+/* Seat selection section */
+.seat-selection {
+  @apply bg-white p-6 rounded-lg shadow-md;
+}
+
+.seat-selection h2 {
+  @apply text-xl font-semibold mb-4;
+}
+
+.seat-map {
+  @apply mb-8;
+}
+
+.seat-map .airplane-cabin {
+  @apply bg-gray-50 p-4 rounded-lg border;
+}
+
+.seat-row {
+  @apply grid grid-cols-7 gap-2 items-center mb-2;
+}
+
+.seat {
+  @apply p-2 rounded text-center transition;
+}
+
+.seat.booked {
+  @apply bg-red-500 text-white cursor-not-allowed;
+}
+
+.seat.selected {
+  @apply bg-blue-600 text-white;
+}
+
+.seat:not(.booked):not(.selected) {
+  @apply bg-gray-200 hover:bg-gray-300;
+}
+
+.seat:disabled {
+  @apply cursor-not-allowed;
+}
+
+/* Passenger details section */
+.passenger-details {
+  @apply mb-8;
+}
+
+.passenger-details h3 {
+  @apply text-lg font-semibold mb-2;
+}
+
+.passenger-form {
+  @apply border p-4 rounded-lg mb-4;
+}
+
+.passenger-form h4 {
+  @apply font-medium mb-2;
+}
+
+.passenger-form label {
+  @apply block mb-2;
+}
+
+.passenger-form input {
+  @apply w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+/* Booking summary section */
+.booking-summary {
+  @apply bg-gray-50 p-4 rounded-lg;
+}
+
+.booking-summary h3 {
+  @apply text-lg font-semibold mb-2;
+}
+
+.booking-summary p {
+  @apply mb-2;
+}
+
+.booking-summary button {
+  @apply mt-4 w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition;
+}
+
+.booking-summary button:disabled {
+  @apply bg-gray-400 cursor-not-allowed;
+}
+
+/* Admin panel section */
+.admin-panel {
+  @apply bg-white p-6 rounded-lg shadow-md;
+}
+
+.admin-panel h2 {
+  @apply text-xl font-semibold mb-4;
+}
+
+.add-flight {
+  @apply mb-8;
+}
+
+.add-flight h3 {
+  @apply text-lg font-semibold mb-2;
+}
+
+.add-flight button {
+  @apply w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition;
+}
+
+/* Table styles for flight and booking management */
+.flight-management, .booking-management {
+  @apply mb-8;
+}
+
+.flight-management h3, .booking-management h3 {
+  @apply text-lg font-semibold mb-2;
+}
+
+table {
+  @apply w-full table-auto border-collapse;
+}
+
+thead {
+  @apply bg-gray-100;
+}
+
+th, td {
+  @apply p-2 text-left;
+}
+
+tr {
+  @apply border-b;
+}
+
+td button {
+  @apply px-2 py-1 rounded text-white;
+}
+
+td button:nth-child(1) {
+  @apply bg-blue-600 hover:bg-blue-700;
+}
+
+td button:nth-child(2) {
+  @apply bg-yellow-600 hover:bg-yellow-700;
+}
+
+td button:nth-child(3) {
+  @apply bg-red-600 hover:bg-red-700;
+}
+
+/* Autocomplete dropdown */
+.autocomplete {
+  @apply absolute bg-white border rounded w-full mt-1 max-h-40 overflow-auto z-10;
+}
+
+.autocomplete li {
+  @apply p-2 hover:bg-gray-100 cursor-pointer;
+}
+
+/* Confirmation page */
+.confirmation {
+  @apply bg-white p-6 rounded-lg shadow-md text-center;
+}
+
+.confirmation h2 {
+  @apply text-xl font-semibold mb-4;
+}
+
+.confirmation p {
+  @apply text-gray-600 mb-4;
+}
+
+.confirmation button {
+  @apply mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700;
+}
+
+/* Loading and message styles */
+.loading {
+  @apply text-center text-blue-600;
+}
+
+.error {
+  @apply bg-red-100 text-red-700 p-4 mb-4 rounded;
+}
+
+.success {
+  @apply bg-green-100 text-green-700 p-4 mb-4 rounded;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .form-row {
+    @apply grid-cols-1;
+  }
+
+  .seat-row {
+    @apply grid-cols-4;
+  }
+
+  .flight-card .flight-details {
+    @apply flex-col items-start;
+  }
+
+  .flight-card .flight-duration {
+    @apply my-2;
+  }
+}
