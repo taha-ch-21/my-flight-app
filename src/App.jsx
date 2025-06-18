@@ -17,7 +17,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Sample city list for autocomplete
 const cities = [
   'New York', 'London', 'Paris', 'Tokyo', 'Sydney', 'Dubai', 'Singapore',
   'Los Angeles', 'Chicago', 'Hong Kong', 'Miami', 'Toronto', 'Mumbai'
@@ -25,14 +24,13 @@ const cities = [
 
 const App = () => {
   const [isAdmin, setIsAdmin] = useState(false);
-  const [view, setView] = useState('search'); // 'search', 'flights', 'seats', 'bookings', 'confirmation', 'admin'
+  const [view, setView] = useState('search');
   const [flights, setFlights] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  // Search form state
   const [searchParams, setSearchParams] = useState({
     tripType: 'one-way',
     from: '',
@@ -44,11 +42,8 @@ const App = () => {
     directOnly: false
   });
 
-  // Autocomplete state
   const [fromSuggestions, setFromSuggestions] = useState([]);
   const [toSuggestions, setToSuggestions] = useState([]);
-
-  // Selected flight state
   const [selectedFlight, setSelectedFlight] = useState(null);
   const [selectedReturnFlight, setSelectedReturnFlight] = useState(null);
   const [selectedSeats, setSelectedSeats] = useState([]);
@@ -56,7 +51,6 @@ const App = () => {
   const [passengerDetails, setPassengerDetails] = useState([]);
   const [bookingReference, setBookingReference] = useState('');
 
-  // Admin state
   const [newFlight, setNewFlight] = useState({
     airline: '',
     from: '',
@@ -73,10 +67,8 @@ const App = () => {
     isDirect: true
   });
 
-  // Editing flight state
   const [editingFlight, setEditingFlight] = useState(null);
 
-  // Generate seat map (flat array)
   function generateSeatMap() {
     const rows = 10;
     const seatsPerRow = 6;
@@ -89,7 +81,6 @@ const App = () => {
     return seatMap;
   }
 
-  // City autocomplete handler
   const handleCityInput = (value, field) => {
     const suggestions = cities.filter(city =>
       city.toLowerCase().startsWith(value.toLowerCase())
@@ -103,7 +94,6 @@ const App = () => {
     }
   };
 
-  // Fetch flights
   const fetchFlights = async () => {
     setLoading(true);
     try {
@@ -124,7 +114,6 @@ const App = () => {
     }
   };
 
-  // Fetch bookings
   const fetchBookings = async () => {
     setLoading(true);
     try {
@@ -143,7 +132,6 @@ const App = () => {
     }
   };
 
-  // Handle flight search
   const handleSearch = async (e) => {
     e.preventDefault();
     if (!cities.includes(searchParams.from) || !cities.includes(searchParams.to)) {
@@ -179,7 +167,6 @@ const App = () => {
     }
   };
 
-  // Handle seat selection
   const handleSeatSelect = (seat, isReturn = false) => {
     const flight = isReturn ? selectedReturnFlight : selectedFlight;
     const seats = isReturn ? selectedReturnSeats : selectedSeats;
@@ -194,7 +181,6 @@ const App = () => {
     }
   };
 
-  // Handle booking
   const handleBooking = async () => {
     if (selectedSeats.length !== searchParams.passengers ||
         (searchParams.tripType === 'round-trip' && selectedReturnSeats.length !== searchParams.passengers)) {
@@ -244,7 +230,6 @@ const App = () => {
     }
   };
 
-  // Handle adding new flight
   const handleAddFlight = async () => {
     if (!newFlight.airline || !cities.includes(newFlight.from) || !cities.includes(newFlight.to) ||
         !newFlight.departureDate || !newFlight.departureTime || !newFlight.arrivalTime ||
@@ -292,7 +277,6 @@ const App = () => {
     }
   };
 
-  // Handle editing flight
   const handleEditFlight = async () => {
     if (!editingFlight.airline || !cities.includes(editingFlight.from) || !cities.includes(editingFlight.to) ||
         !editingFlight.departureDate || !editingFlight.departureTime || !editingFlight.arrivalTime ||
@@ -321,7 +305,6 @@ const App = () => {
     }
   };
 
-  // Handle deleting flight
   const handleDeleteFlight = async (flightId) => {
     if (!window.confirm('Are you sure you want to delete this flight?')) return;
     setLoading(true);
@@ -336,7 +319,6 @@ const App = () => {
     }
   };
 
-  // Handle cancelling booking
   const handleCancelBooking = async (booking) => {
     if (!window.confirm('Are you sure you want to cancel this booking?')) return;
     setLoading(true);
@@ -368,7 +350,6 @@ const App = () => {
     }
   };
 
-  // Initialize passenger details
   useEffect(() => {
     if (selectedFlight && searchParams.passengers > 0) {
       setPassengerDetails(
@@ -377,13 +358,11 @@ const App = () => {
     }
   }, [selectedFlight, searchParams.passengers]);
 
-  // Fetch data on mount
   useEffect(() => {
     fetchFlights();
     fetchBookings();
   }, []);
 
-  // Clear messages after 5 seconds
   useEffect(() => {
     if (error || success) {
       const timer = setTimeout(() => {
@@ -436,24 +415,22 @@ const App = () => {
         {!isAdmin ? (
           <>
             {view === 'search' ? (
-              <div>
-                <h2>Search Flights</h2>
+              <div className="search-section glass-card">
+                <h2 className="section-title">Search Flights</h2>
                 <form onSubmit={handleSearch}>
-                  <div>
-                    <div>
-                      <label>Trip Type</label>
-                      <select
-                        value={searchParams.tripType}
-                        onChange={(e) => setSearchParams({ ...searchParams, tripType: e.target.value })}
-                      >
-                        <option value="one-way">One-way</option>
-                        <option value="round-trip">Round-trip</option>
-                      </select>
-                    </div>
+                  <div className="form-group">
+                    <label>Trip Type</label>
+                    <select
+                      value={searchParams.tripType}
+                      onChange={(e) => setSearchParams({ ...searchParams, tripType: e.target.value })}
+                    >
+                      <option value="one-way">One-way</option>
+                      <option value="round-trip">Round-trip</option>
+                    </select>
                   </div>
 
                   <div className="flex">
-                    <div className="autocomplete">
+                    <div className="autocomplete form-group">
                       <label>From</label>
                       <input
                         type="text"
@@ -462,7 +439,7 @@ const App = () => {
                         required
                       />
                       {fromSuggestions.length > 0 && (
-                        <ul>
+                        <ul className="suggestions">
                           {fromSuggestions.map((city, index) => (
                             <li
                               key={index}
@@ -477,7 +454,7 @@ const App = () => {
                         </ul>
                       )}
                     </div>
-                    <div className="autocomplete">
+                    <div className="autocomplete form-group">
                       <label>To</label>
                       <input
                         type="text"
@@ -486,7 +463,7 @@ const App = () => {
                         required
                       />
                       {toSuggestions.length > 0 && (
-                        <ul>
+                        <ul className="suggestions">
                           {toSuggestions.map((city, index) => (
                             <li
                               key={index}
@@ -504,7 +481,7 @@ const App = () => {
                   </div>
 
                   <div className="flex">
-                    <div>
+                    <div className="form-group">
                       <label>Departure</label>
                       <input
                         type="date"
@@ -515,7 +492,7 @@ const App = () => {
                       />
                     </div>
                     {searchParams.tripType === 'round-trip' && (
-                      <div>
+                      <div className="form-group">
                         <label>Return</label>
                         <input
                           type="date"
@@ -529,7 +506,7 @@ const App = () => {
                   </div>
 
                   <div className="flex">
-                    <div>
+                    <div className="form-group">
                       <label>Passengers</label>
                       <select
                         value={searchParams.passengers}
@@ -540,7 +517,7 @@ const App = () => {
                         ))}
                       </select>
                     </div>
-                    <div>
+                    <div className="form-group">
                       <label>Class</label>
                       <select
                         value={searchParams.cabinClass}
@@ -551,7 +528,7 @@ const App = () => {
                         <option value="first">First Class</option>
                       </select>
                     </div>
-                    <div className="flex">
+                    <div className="form-group checkbox-group">
                       <label>
                         <input
                           type="checkbox"
@@ -569,40 +546,48 @@ const App = () => {
                 </form>
               </div>
             ) : view === 'flights' ? (
-              <div>
-                <h2>Available Flights</h2>
-                <button
-                  className="bg-gray"
-                  onClick={() => setView('search')}
-                >
-                  Back to Search
-                </button>
+              <div className="flights-section glass-card">
+                <div className="flex justify-between align-center">
+                  <h2 className="section-title">Available Flights</h2>
+                  <button
+                    className="bg-gray"
+                    onClick={() => setView('search')}
+                  >
+                    Back to Search
+                  </button>
+                </div>
                 {flights.length === 0 ? (
-                  <p>No flights found. Try different search criteria.</p>
+                  <p className="no-results">No flights found. Try different search criteria.</p>
                 ) : (
-                  <div className="flex">
+                  <div className="flights-grid">
                     {flights.map(flight => (
                       <div key={flight.id} className="flight-card">
-                        <div className="flex">
+                        <div className="flight-header">
                           <h3>{flight.airline}</h3>
-                          <span>${flight.price}</span>
+                          <span className="price">${flight.price}</span>
                         </div>
-                        <div className="flex">
-                          <div>
-                            <p>{flight.departureTime}</p>
-                            <p>{flight.from}</p>
+                        <div className="flight-details">
+                          <div className="flight-time">
+                            <p className="time">{flight.departureTime}</p>
+                            <p className="city">{flight.from}</p>
                           </div>
-                          <div>
+                          <div className="flight-duration">
                             <p>{flight.duration}</p>
-                            <div></div>
-                            <p>{flight.isDirect ? 'Direct' : 'Non-direct'}</p>
+                            <div className="flight-line">
+                              <div className="flight-dot"></div>
+                              <div className="flight-line-main"></div>
+                              <div className="flight-dot"></div>
+                            </div>
+                            <p className={flight.isDirect ? 'direct' : 'indirect'}>
+                              {flight.isDirect ? 'Direct' : 'Non-direct'}
+                            </p>
                           </div>
-                          <div>
-                            <p>{flight.arrivalTime}</p>
-                            <p>{flight.to}</p>
+                          <div className="flight-time">
+                            <p className="time">{flight.arrivalTime}</p>
+                            <p className="city">{flight.to}</p>
                           </div>
                         </div>
-                        <p>Status: {flight.status}</p>
+                        <p className="flight-status">Status: {flight.status}</p>
                         <button
                           className="bg-blue"
                           onClick={() => {
@@ -618,39 +603,39 @@ const App = () => {
                 )}
               </div>
             ) : view === 'seats' ? (
-              <div>
-                <h2>
-                  Select Seats for {selectedFlight.airline} ({selectedFlight.from} to {selectedFlight.to})
-                </h2>
-                <button
-                  className="bg-gray"
-                  onClick={() => setView('flights')}
-                >
-                  Back to Flights
-                </button>
+              <div className="seats-section glass-card">
+                <div className="flex justify-between align-center">
+                  <h2 className="section-title">
+                    Select Seats for {selectedFlight.airline} ({selectedFlight.from} to {selectedFlight.to})
+                  </h2>
+                  <button
+                    className="bg-gray"
+                    onClick={() => setView('flights')}
+                  >
+                    Back to Flights
+                  </button>
+                </div>
 
-                <div>
+                <div className="seat-selection">
                   <h3>Seat Map</h3>
                   <div className="seat-map">
-                    <div></div>
+                    <div className="seat-map-header"></div>
                     {['A', 'B', 'C', '', 'D', 'E', 'F'].map((label, index) => (
-                      <div key={index}>{label}</div>
+                      <div key={index} className="seat-label">{label}</div>
                     ))}
                     {Array(10).fill().map((_, rowIndex) => (
-                      <div key={rowIndex} className="flex">
-                        <div>{rowIndex + 1}</div>
+                      <div key={rowIndex} className="seat-row">
+                        <div className="row-number">{rowIndex + 1}</div>
                         {selectedFlight.seatMap
                           .slice(rowIndex * 6, (rowIndex + 1) * 6)
                           .map(seat => (
                             <button
                               key={seat}
-                              className={
-                                selectedFlight.bookedSeats.includes(seat)
-                                  ? 'booked'
-                                  : selectedSeats.includes(seat)
-                                  ? 'selected'
-                                  : 'available'
-                              }
+                              className={`seat ${selectedFlight.bookedSeats.includes(seat)
+                                ? 'booked'
+                                : selectedSeats.includes(seat)
+                                ? 'selected'
+                                : 'available'}`}
                               onClick={() => handleSeatSelect(seat)}
                               disabled={selectedFlight.bookedSeats.includes(seat)}
                             >
@@ -663,7 +648,7 @@ const App = () => {
                 </div>
 
                 {searchParams.tripType === 'round-trip' && !selectedReturnFlight && (
-                  <div>
+                  <div className="return-flight">
                     <h3>Select Return Flight</h3>
                     <button
                       className="bg-blue"
@@ -683,30 +668,28 @@ const App = () => {
                 )}
 
                 {searchParams.tripType === 'round-trip' && selectedReturnFlight && (
-                  <div>
+                  <div className="seat-selection">
                     <h3>
                       Return Flight Seat Map ({selectedReturnFlight.from} to {selectedReturnFlight.to})
                     </h3>
                     <div className="seat-map">
-                      <div></div>
+                      <div className="seat-map-header"></div>
                       {['A', 'B', 'C', '', 'D', 'E', 'F'].map((label, index) => (
-                        <div key={index}>{label}</div>
+                        <div key={index} className="seat-label">{label}</div>
                       ))}
                       {Array(10).fill().map((_, rowIndex) => (
-                        <div key={rowIndex} className="flex">
-                          <div>{rowIndex + 1}</div>
+                        <div key={rowIndex} className="seat-row">
+                          <div className="row-number">{rowIndex + 1}</div>
                           {selectedReturnFlight.seatMap
                             .slice(rowIndex * 6, (rowIndex + 1) * 6)
                             .map(seat => (
                               <button
                                 key={seat}
-                                className={
-                                  selectedReturnFlight.bookedSeats.includes(seat)
-                                    ? 'booked'
-                                    : selectedReturnSeats.includes(seat)
-                                    ? 'selected'
-                                    : 'available'
-                                }
+                                className={`seat ${selectedReturnFlight.bookedSeats.includes(seat)
+                                  ? 'booked'
+                                  : selectedReturnSeats.includes(seat)
+                                  ? 'selected'
+                                  : 'available'}`}
                                 onClick={() => handleSeatSelect(seat, true)}
                                 disabled={selectedReturnFlight.bookedSeats.includes(seat)}
                               >
@@ -719,14 +702,14 @@ const App = () => {
                   </div>
                 )}
 
-                <div>
+                <div className="passenger-info">
                   <h3>Passenger Information</h3>
                   {passengerDetails.map((passenger, index) => (
-                    <div key={index}>
+                    <div key={index} className="passenger-form">
                       <h4>Passenger {index + 1}</h4>
                       <div className="flex">
-                        <label>
-                          <span>Full Name</span>
+                        <div className="form-group">
+                          <label>Full Name</label>
                           <input
                             type="text"
                             value={passenger.name}
@@ -737,9 +720,9 @@ const App = () => {
                             }}
                             required
                           />
-                        </label>
-                        <label>
-                          <span>Passport</span>
+                        </div>
+                        <div className="form-group">
+                          <label>Passport Number</label>
                           <input
                             type="text"
                             value={passenger.passport}
@@ -750,30 +733,51 @@ const App = () => {
                             }}
                             required
                           />
-                        </label>
+                        </div>
                       </div>
                     </div>
                   ))}
                 </div>
 
-                <div>
+                <div className="booking-summary">
                   <h3>Booking Summary</h3>
-                  <p><strong>Flight:</strong> {selectedFlight.from} to {selectedFlight.to}</p>
-                  <p><strong>Date:</strong> {selectedFlight.departureDate}</p>
-                  <p><strong>Selected Seats:</strong> {selectedSeats.join(', ') || 'None'}</p>
+                  <div className="summary-item">
+                    <span>Flight:</span>
+                    <span>{selectedFlight.from} to {selectedFlight.to}</span>
+                  </div>
+                  <div className="summary-item">
+                    <span>Date:</span>
+                    <span>{selectedFlight.departureDate}</span>
+                  </div>
+                  <div className="summary-item">
+                    <span>Selected Seats:</span>
+                    <span>{selectedSeats.join(', ') || 'None'}</span>
+                  </div>
                   {selectedReturnFlight && (
                     <>
-                      <p><strong>Return Flight:</strong> {selectedReturnFlight.from} to {selectedReturnFlight.to}</p>
-                      <p><strong>Return Date:</strong> {selectedReturnFlight.departureDate}</p>
-                      <p><strong>Return Seats:</strong> {selectedReturnSeats.join(', ') || 'None'}</p>
+                      <div className="summary-item">
+                        <span>Return Flight:</span>
+                        <span>{selectedReturnFlight.from} to {selectedReturnFlight.to}</span>
+                      </div>
+                      <div className="summary-item">
+                        <span>Return Date:</span>
+                        <span>{selectedReturnFlight.departureDate}</span>
+                      </div>
+                      <div className="summary-item">
+                        <span>Return Seats:</span>
+                        <span>{selectedReturnSeats.join(', ') || 'None'}</span>
+                      </div>
                     </>
                   )}
-                  <p><strong>Total Price:</strong> $
-                    {(selectedFlight.price * searchParams.passengers +
-                      (selectedReturnFlight ? selectedReturnFlight.price * searchParams.passengers : 0)).toFixed(2)}
-                  </p>
+                  <div className="summary-item total">
+                    <span>Total Price:</span>
+                    <span>$
+                      {(selectedFlight.price * searchParams.passengers +
+                        (selectedReturnFlight ? selectedReturnFlight.price * searchParams.passengers : 0)).toFixed(2)}
+                    </span>
+                  </div>
                   <button
-                    className="bg-blue"
+                    className="bg-blue confirm-booking"
                     onClick={handleBooking}
                     disabled={
                       selectedSeats.length !== searchParams.passengers ||
@@ -786,17 +790,350 @@ const App = () => {
                 </div>
               </div>
             ) : view === 'bookings' ? (
-              <div>
-                <h2>My Bookings</h2>
+              <div className="bookings-section glass-card">
+                <div className="flex justify-between align-center">
+                  <h2 className="section-title">My Bookings</h2>
+                  <button
+                    className="bg-gray"
+                    onClick={() => setView('search')}
+                  >
+                    Back to Search
+                  </button>
+                </div>
+                {bookings.length === 0 ? (
+                  <p className="no-results">No bookings found.</p>
+                ) : (
+                  <div className="bookings-table">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Booking ID</th>
+                          <th>Flight</th>
+                          <th>Seats</th>
+                          <th>Total</th>
+                          <th>Status</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {bookings.map(booking => (
+                          <tr key={booking.id}>
+                            <td>{booking.id.substring(0, 8)}</td>
+                            <td>
+                              {booking.flightId}
+                              {booking.returnFlightId && <><br />Return: {booking.returnFlightId}</>}
+                            </td>
+                            <td>
+                              {booking.seats.join(', ')}
+                              {booking.returnSeats && <><br />Return: {booking.returnSeats.join(', ')}</>}
+                            </td>
+                            <td>${booking.totalPrice}</td>
+                            <td>{booking.status}</td>
+                            <td>
+                              {booking.status === 'confirmed' && (
+                                <button
+                                  className="bg-red"
+                                  onClick={() => handleCancelBooking(booking)}
+                                >
+                                  Cancel
+                                </button>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            ) : view === 'confirmation' ? (
+              <div className="confirmation-section glass-card">
+                <h2 className="section-title">Booking Confirmed!</h2>
+                <div className="confirmation-details">
+                  <p>Your booking has been successfully placed.</p>
+                  <p><strong>Booking Reference:</strong> {bookingReference}</p>
+                  <div className="confirmation-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                      <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                </div>
                 <button
-                  className="bg-gray"
+                  className="bg-blue"
                   onClick={() => setView('search')}
                 >
                   Back to Search
                 </button>
-                {bookings.length === 0 ? (
-                  <p>No bookings found.</p>
-                ) : (
+              </div>
+            ) : null}
+          </>
+        ) : (
+          <div className="admin-section glass-card">
+            <h2 className="section-title">Admin Dashboard</h2>
+
+            <div className="admin-form">
+              <h3>{editingFlight ? 'Edit Flight' : 'Add New Flight'}</h3>
+              <div className="flex">
+                <div className="form-group">
+                  <label>Airline</label>
+                  <input
+                    type="text"
+                    value={editingFlight ? editingFlight.airline : newFlight.airline}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      editingFlight
+                        ? setEditingFlight({ ...editingFlight, airline: value })
+                        : setNewFlight({ ...newFlight, airline: value });
+                    }}
+                  />
+                </div>
+                <div className="autocomplete form-group">
+                  <label>From</label>
+                  <input
+                    type="text"
+                    value={editingFlight ? editingFlight.from : newFlight.from}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      editingFlight
+                        ? setEditingFlight({ ...editingFlight, from: value })
+                        : setNewFlight({ ...newFlight, from: value });
+                      const suggestions = cities.filter(city => city.toLowerCase().startsWith(value.toLowerCase()));
+                      setFromSuggestions(suggestions);
+                    }}
+                  />
+                  {fromSuggestions.length > 0 && (
+                    <ul className="suggestions">
+                      {fromSuggestions.map((city, index) => (
+                        <li
+                          key={index}
+                          onClick={() => {
+                            editingFlight
+                              ? setEditingFlight({ ...editingFlight, from: city })
+                              : setNewFlight({ ...newFlight, from: city });
+                            setFromSuggestions([]);
+                          }}
+                        >
+                          {city}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+                <div className="autocomplete form-group">
+                  <label>To</label>
+                  <input
+                    type="text"
+                    value={editingFlight ? editingFlight.to : newFlight.to}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      editingFlight
+                        ? setEditingFlight({ ...editingFlight, to: value })
+                        : setNewFlight({ ...newFlight, to: value });
+                      const suggestions = cities.filter(city => city.toLowerCase().startsWith(value.toLowerCase()));
+                      setToSuggestions(suggestions);
+                    }}
+                  />
+                  {toSuggestions.length > 0 && (
+                    <ul className="suggestions">
+                      {toSuggestions.map((city, index) => (
+                        <li
+                          key={index}
+                          onClick={() => {
+                            editingFlight
+                              ? setEditingFlight({ ...editingFlight, to: city })
+                              : setNewFlight({ ...newFlight, to: city });
+                            setToSuggestions([]);
+                          }}
+                        >
+                          {city}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex">
+                <div className="form-group">
+                  <label>Departure Date</label>
+                  <input
+                    type="date"
+                    value={editingFlight ? editingFlight.departureDate : newFlight.departureDate}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      editingFlight
+                        ? setEditingFlight({ ...editingFlight, departureDate: value })
+                        : setNewFlight({ ...newFlight, departureDate: value });
+                    }}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Departure Time</label>
+                  <input
+                    type="time"
+                    value={editingFlight ? editingFlight.departureTime : newFlight.departureTime}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      editingFlight
+                        ? setEditingFlight({ ...editingFlight, departureTime: value })
+                        : setNewFlight({ ...newFlight, departureTime: value });
+                    }}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Arrival Time</label>
+                  <input
+                    type="time"
+                    value={editingFlight ? editingFlight.arrivalTime : newFlight.arrivalTime}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      editingFlight
+                        ? setEditingFlight({ ...editingFlight, arrivalTime: value })
+                        : setNewFlight({ ...newFlight, arrivalTime: value });
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div className="flex">
+                <div className="form-group">
+                  <label>Price</label>
+                  <input
+                    type="number"
+                    value={editingFlight ? editingFlight.price : newFlight.price}
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value);
+                      editingFlight
+                        ? setEditingFlight({ ...editingFlight, price: value })
+                        : setNewFlight({ ...newFlight, price: value });
+                    }}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Total Seats</label>
+                  <input
+                    type="number"
+                    value={editingFlight ? editingFlight.totalSeats : newFlight.totalSeats}
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value);
+                      editingFlight
+                        ? setEditingFlight({ ...editingFlight, totalSeats: value })
+                        : setNewFlight({ ...newFlight, totalSeats: value });
+                    }}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Duration</label>
+                  <input
+                    type="text"
+                    value={editingFlight ? editingFlight.duration : newFlight.duration}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      editingFlight
+                        ? setEditingFlight({ ...editingFlight, duration: value })
+                        : setNewFlight({ ...newFlight, duration: value });
+                    }}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Status</label>
+                  <select
+                    value={editingFlight ? editingFlight.status : newFlight.status}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      editingFlight
+                        ? setEditingFlight({ ...editingFlight, status: value })
+                        : setNewFlight({ ...newFlight, status: value });
+                    }}
+                  >
+                    <option value="Scheduled">Scheduled</option>
+                    <option value="Delayed">Delayed</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="form-actions">
+                <button
+                  className="bg-blue"
+                  onClick={editingFlight ? handleEditFlight : handleAddFlight}
+                >
+                  {editingFlight ? 'Update Flight' : 'Add Flight'}
+                </button>
+                {editingFlight && (
+                  <button
+                    className="bg-gray"
+                    onClick={() => setEditingFlight(null)}
+                  >
+                    Cancel Edit
+                  </button>
+                )}
+              </div>
+            </div>
+
+            <div className="admin-tables">
+              <div className="flight-management">
+                <h3>Flight Management</h3>
+                <div className="table-container">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Airline</th>
+                        <th>Route</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Price</th>
+                        <th>Booked</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {flights.map(flight => (
+                        <tr key={flight.id}>
+                          <td>{flight.airline}</td>
+                          <td>{flight.from} → {flight.to}</td>
+                          <td>{flight.departureDate}</td>
+                          <td>{flight.departureTime} - {flight.arrivalTime}</td>
+                          <td>${flight.price}</td>
+                          <td>{flight.bookedSeats?.length || 0}/{flight.totalSeats}</td>
+                          <td>{flight.status}</td>
+                          <td>
+                            <div className="flex">
+                              <button
+                                className="bg-blue"
+                                onClick={() => {
+                                  setSelectedFlight(flight);
+                                  setIsAdmin(false);
+                                  setView('seats');
+                                }}
+                              >
+                                View
+                              </button>
+                              <button
+                                className="bg-yellow"
+                                onClick={() => setEditingFlight(flight)}
+                              >
+                                Edit
+                              </button>
+                              <button
+                                className="bg-red"
+                                onClick={() => handleDeleteFlight(flight.id)}
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div className="booking-management">
+                <h3>Booking Management</h3>
+                <div className="table-container">
                   <table>
                     <thead>
                       <tr>
@@ -805,6 +1142,7 @@ const App = () => {
                         <th>Seats</th>
                         <th>Total</th>
                         <th>Status</th>
+                        <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -821,324 +1159,22 @@ const App = () => {
                           </td>
                           <td>${booking.totalPrice}</td>
                           <td>{booking.status}</td>
+                          <td>
+                            {booking.status === 'confirmed' && (
+                              <button
+                                className="bg-red"
+                                onClick={() => handleCancelBooking(booking)}
+                              >
+                                Cancel
+                              </button>
+                            )}
+                          </td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
-                )}
+                </div>
               </div>
-            ) : view === 'confirmation' ? (
-              <div>
-                <h2>Booking Confirmed!</h2>
-                <p>Your booking has been successfully placed.</p>
-                <p><strong>Booking Reference:</strong> {bookingReference}</p>
-                <button
-                  className="bg-blue"
-                  onClick={() => setView('search')}
-                >
-                  Back to Search
-                </button>
-              </div>
-            ) : null}
-          </>
-        ) : (
-          <div>
-            <h2>Admin Dashboard</h2>
-
-            <div>
-              <h3>{editingFlight ? 'Edit Flight' : 'Add New Flight'}</h3>
-              <div className="flex">
-                <label>
-                  <span>Airline</span>
-                  <input
-                    type="text"
-                    value={editingFlight ? editingFlight.airline : newFlight.airline}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      editingFlight
-                        ? setEditingFlight({ ...editingFlight, airline: value })
-                        : setNewFlight({ ...newFlight, airline: value });
-                    }}
-                  />
-                </label>
-                <label className="autocomplete">
-                  <span>From</span>
-                  <input
-                    type="text"
-                    value={editingFlight ? editingFlight.from : newFlight.from}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      editingFlight
-                        ? setEditingFlight({ ...editingFlight, from: value })
-                        : setNewFlight({ ...newFlight, from: value });
-                      const suggestions = cities.filter(city => city.toLowerCase().startsWith(value.toLowerCase()));
-                      editingFlight ? setFromSuggestions(suggestions) : setFromSuggestions(suggestions);
-                    }}
-                  />
-                  {fromSuggestions.length > 0 && (
-                    <ul>
-                      {fromSuggestions.map((city, index) => (
-                        <li
-                          key={index}
-                          onClick={() => {
-                            editingFlight
-                              ? setEditingFlight({ ...editingFlight, from: city })
-                              : setNewFlight({ ...newFlight, from: city });
-                            setFromSuggestions([]);
-                          }}
-                        >
-                          {city}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </label>
-                <label className="autocomplete">
-                  <span>To</span>
-                  <input
-                    type="text"
-                    value={editingFlight ? editingFlight.to : newFlight.to}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      editingFlight
-                        ? setEditingFlight({ ...editingFlight, to: value })
-                        : setNewFlight({ ...newFlight, to: value });
-                      const suggestions = cities.filter(city => city.toLowerCase().startsWith(value.toLowerCase()));
-                      editingFlight ? setToSuggestions(suggestions) : setToSuggestions(suggestions);
-                    }}
-                  />
-                  {toSuggestions.length > 0 && (
-                    <ul>
-                      {toSuggestions.map((city, index) => (
-                        <li
-                          key={index}
-                          onClick={() => {
-                            editingFlight
-                              ? setEditingFlight({ ...editingFlight, to: city })
-                              : setNewFlight({ ...newFlight, to: city });
-                            setToSuggestions([]);
-                          }}
-                        >
-                          {city}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </label>
-              </div>
-
-              <div className="flex">
-                <label>
-                  <span>Departure Date</span>
-                  <input
-                    type="date"
-                    value={editingFlight ? editingFlight.departureDate : newFlight.departureDate}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      editingFlight
-                        ? setEditingFlight({ ...editingFlight, departureDate: value })
-                        : setNewFlight({ ...newFlight, departureDate: value });
-                    }}
-                  />
-                </label>
-                <label>
-                  <span>Departure Time</span>
-                  <input
-                    type="time"
-                    value={editingFlight ? editingFlight.departureTime : newFlight.departureTime}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      editingFlight
-                        ? setEditingFlight({ ...editingFlight, departureTime: value })
-                        : setNewFlight({ ...newFlight, departureTime: value });
-                    }}
-                  />
-                </label>
-                <label>
-                  <span>Arrival Time</span>
-                  <input
-                    type="time"
-                    value={editingFlight ? editingFlight.arrivalTime : newFlight.arrivalTime}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      editingFlight
-                        ? setEditingFlight({ ...editingFlight, arrivalTime: value })
-                        : setNewFlight({ ...newFlight, arrivalTime: value });
-                    }}
-                  />
-                </label>
-              </div>
-
-              <div className="flex">
-                <label>
-                  <span>Price</span>
-                  <input
-                    type="number"
-                    value={editingFlight ? editingFlight.price : newFlight.price}
-                    onChange={(e) => {
-                      const value = parseInt(e.target.value);
-                      editingFlight
-                        ? setEditingFlight({ ...editingFlight, price: value })
-                        : setNewFlight({ ...newFlight, price: value });
-                    }}
-                  />
-                </label>
-                <label>
-                  <span>Total Seats</span>
-                  <input
-                    type="number"
-                    value={editingFlight ? editingFlight.totalSeats : newFlight.totalSeats}
-                    onChange={(e) => {
-                      const value = parseInt(e.target.value);
-                      editingFlight
-                        ? setEditingFlight({ ...editingFlight, totalSeats: value })
-                        : setNewFlight({ ...newFlight, totalSeats: value });
-                    }}
-                  />
-                </label>
-                <label>
-                  <span>Duration</span>
-                  <input
-                    type="text"
-                    value={editingFlight ? editingFlight.duration : newFlight.duration}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      editingFlight
-                        ? setEditingFlight({ ...editingFlight, duration: value })
-                        : setNewFlight({ ...newFlight, duration: value });
-                    }}
-                  />
-                </label>
-                <label>
-                  <span>Status</span>
-                  <select
-                    value={editingFlight ? editingFlight.status : newFlight.status}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      editingFlight
-                        ? setEditingFlight({ ...editingFlight, status: value })
-                        : setNewFlight({ ...newFlight, status: value });
-                    }}
-                  >
-                    <option value="Scheduled">Scheduled</option>
-                    <option value="Delayed">Delayed</option>
-                    <option value="Cancelled">Cancelled</option>
-                  </select>
-                </label>
-              </div>
-
-              <button
-                className="bg-blue"
-                onClick={editingFlight ? handleEditFlight : handleAddFlight}
-              >
-                {editingFlight ? 'Update Flight' : 'Add Flight'}
-              </button>
-              {editingFlight && (
-                <button
-                  className="bg-gray"
-                  onClick={() => setEditingFlight(null)}
-                >
-                  Cancel Edit
-                </button>
-              )}
-            </div>
-
-            <div>
-              <h3>Flight Management</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Airline</th>
-                    <th>Route</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Price</th>
-                    <th>Booked</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {flights.map(flight => (
-                    <tr key={flight.id}>
-                      <td>{flight.airline}</td>
-                      <td>{flight.from} → {flight.to}</td>
-                      <td>{flight.departureDate}</td>
-                      <td>{flight.departureTime} - {flight.arrivalTime}</td>
-                      <td>${flight.price}</td>
-                      <td>{flight.bookedSeats?.length || 0}/{flight.totalSeats}</td>
-                      <td>{flight.status}</td>
-                      <td className="flex">
-                        <button
-                          className="bg-blue"
-                          onClick={() => {
-                            setSelectedFlight(flight);
-                            setIsAdmin(false);
-                            setView('seats');
-                          }}
-                        >
-                          View
-                        </button>
-                        <button
-                          className="bg-yellow"
-                          onClick={() => setEditingFlight(flight)}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          className="bg-red"
-                          onClick={() => handleDeleteFlight(flight.id)}
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            <div>
-              <h3>Booking Management</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Booking ID</th>
-                    <th>Flight</th>
-                    <th>Seats</th>
-                    <th>Total</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {bookings.map(booking => (
-                    <tr key={booking.id}>
-                      <td>{booking.id.substring(0, 8)}</td>
-                      <td>
-                        {booking.flightId}
-                        {booking.returnFlightId && <><br />Return: {booking.returnFlightId}</>}
-                      </td>
-                      <td>
-                        {booking.seats.join(', ')}
-                        {booking.returnSeats && <><br />Return: {booking.returnSeats.join(', ')}</>}
-                      </td>
-                      <td>${booking.totalPrice}</td>
-                      <td>{booking.status}</td>
-                      <td>
-                        {booking.status === 'confirmed' && (
-                          <button
-                            className="bg-red"
-                            onClick={() => handleCancelBooking(booking)}
-                          >
-                            Cancel
-                          </button>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
             </div>
           </div>
         )}
