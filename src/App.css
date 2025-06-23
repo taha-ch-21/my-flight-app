@@ -645,7 +645,7 @@ tr:hover {
 /* Admin form styles */
 .admin-form {
   background-color: rgba(3, 0, 0, 0.324);
-/* background-color: rgba(3, 0 ,0,); */
+
   padding: 2rem;
   border-radius: 10px;
   margin-bottom: 2rem;
