@@ -34,7 +34,7 @@ const Auth = ({ onLogin }) => {
 	}
 
 	// Mock authentication - in a real app, you would call an API here
-	if (credentials.email === 'greatwaqas@gmail.com' && credentials.password === 'waqas123') {
+	if (credentials.email === 'aniquaiqbal@gmail.com' && credentials.password === 'dildilpakistan123') {
 	  onLogin({ email: credentials.email, name: 'Admin', isAdmin: true });
 	} else if (credentials.email === 'user@skyjourney.com' && credentials.password === 'user123') {
 	  onLogin({ email: credentials.email, name: 'User', isAdmin: false });
