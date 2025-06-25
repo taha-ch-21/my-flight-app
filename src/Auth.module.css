@@ -1,20 +1,38 @@
 .container {
   min-height: 100vh;
-  background-color: #f9fafb;
+  background-image: url("https://thumbs.dreamstime.com/b/take-off-aeroplane-business-over-cityscape-beautiful-sunset-background-65831317.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 2rem;
+  position: relative;
+  z-index: 1;
 }
 
+.container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4); /* Dark overlay */
+  z-index: -1;
+}
+
+
 .card {
-  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.15); /* Semi-transparent white */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /* Safari support */
   border-radius: 1rem;
   padding: 2rem;
   max-width: 400px;
   width: 100%;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle glass border */
 }
+
 
 .title {
   font-size: 1.5rem;

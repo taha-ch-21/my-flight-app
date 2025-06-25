@@ -15,7 +15,44 @@ const firebaseConfig = {
   appId: "1:808576798168:web:8db1a56546a1ca333af6ad",
   measurementId: "G-R7ZVG9WYXN"
 };
-
+const hotels = [
+  {
+    id: 1,
+    name: "Marriott Hotel",
+    location: "Karachi",
+    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    website: "https://www.marriott.com",
+    price: "$150/night",
+    rating: 4.5
+  },
+  {
+    id: 2,
+    name: "Pearl Continental",
+    location: "Lahore",
+    image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    website: "https://www.pchotels.com",
+    price: "$120/night",
+    rating: 4.2
+  },
+  {
+    id: 3,
+    name: "Serena Hotel",
+    location: "Islamabad",
+    image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    website: "https://www.serenahotels.com",
+    price: "$180/night",
+    rating: 4.7
+  },
+  {
+    id: 4,
+    name: "Avari Towers",
+    location: "Karachi",
+    image: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    website: "https://www.avari.com",
+    price: "$130/night",
+    rating: 4.3
+  }
+];
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -1483,6 +1520,33 @@ const App = () => {
         )}
       </main>
 
+<div className="hotel-section">
+  <h2>Recommended Hotels</h2>
+  <div className="hotel-cards">
+    {hotels.map(hotel => (
+      <div key={hotel.id} className="hotel-card">
+        <img src={hotel.image} alt={hotel.name} className="hotel-image" />
+        <div className="hotel-info">
+          <h3 className="hotel-name">{hotel.name}</h3>
+          <p className="hotel-location">{hotel.location}</p>
+          <p className="hotel-price">{hotel.price}</p>
+          <div className="hotel-rating">
+            <span>⭐</span>
+            <span>{hotel.rating}</span>
+          </div>
+          <a 
+            href={hotel.website} 
+            className="hotel-website" 
+            target="_blank" 
+            rel="noopener noreferrer"
+          >
+            Visit Website
+          </a>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
       {/* Footer */}
       {/* <footer className="footer">
         <div className="container footer-content">
